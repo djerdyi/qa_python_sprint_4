@@ -1,20 +1,40 @@
-from selenium import webdriver
 from pages.main_page import MainPage
-from locators.main_page_locators import MainPageLocators as mpl
-from time import sleep
 
 class TestMainPage:
 
-    driver = None
+    def test_order_button(self, driver):
+        main_page = MainPage(driver)
+        main_page.click_order_button()
 
-    def test_main_page(self):
-        self.driver = webdriver.Firefox()
-        self.driver.get('https://qa-scooter.praktikum-services.ru/')
-        main_page = MainPage(self.driver)
-        main_page.open_question_1()
-        check = False
-        check = self.driver.find_element(*mpl.PARAGRAPH_ANSWER_1).is_displayed()
-        # sleep(5)
-        self.driver.quit()
+        assert main_page.check_order_url()
 
-        assert check
+    def test_faq_1(self, driver):
+        self.check_faq(MainPage(driver), 1)
+
+    def test_faq_2(self, driver):
+        self.check_faq(MainPage(driver), 2)
+
+    def test_faq_3(self, driver):
+        self.check_faq(MainPage(driver), 3)
+
+    def test_faq_4(self, driver):
+        self.check_faq(MainPage(driver), 4)
+
+    def test_faq_5(self, driver):
+        self.check_faq(MainPage(driver), 5)
+
+    def test_faq_6(self, driver):
+        self.check_faq(MainPage(driver), 6)
+
+    def test_faq_7(self, driver):
+        self.check_faq(MainPage(driver), 7)
+
+    def test_faq_8(self, driver):
+        self.check_faq(MainPage(driver), 8)
+
+    def check_faq(self, main_page: MainPage, number):
+        main_page.open_question(number)
+
+        assert main_page.check_answer(number), (
+            f'For question "{main_page.get_question_text(number)}" expected answer "{main_page.get_answer_text(number)}".'
+        )
