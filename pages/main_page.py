@@ -18,7 +18,6 @@ class MainPage:
         return "order" in self.driver.current_url
 
     def open_question(self, number: int):
-        # self.driver.execute_script("arguments[0].scrollIntoView();", element)
         self.driver.find_element(*mpl.get_question_locator(number)).click()
     
     def check_answer(self, number: int):

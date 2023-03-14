@@ -1,7 +1,6 @@
 import pytest
 import random
 import string
-from copy import copy
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
