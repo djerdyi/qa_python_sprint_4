@@ -1,7 +1,8 @@
-import locators.main_page_locators as mpl
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.webdriver.common.by import By
+import allure
+
+from .. import consts as c
+from ..locators.main_page_locators import MainPageLocators as mpl
+
 
 class MainPage:
 
@@ -11,20 +12,24 @@ class MainPage:
     def order_button(self):
         return self.driver.find_element(*mpl.BUTTON_ORDER)
     
+    @allure.step('Клик на кнопку "Заказать"')
     def click_order_button(self):
         self.order_button().click()
     
+    @allure.step('Проверяем ссылку')
     def check_order_url(self):
-        return "order" in self.driver.current_url
+        return c.ORDER_BASE_URL == self.driver.current_url
 
+    @allure.step('Открываем статью {number}')
     def open_question(self, number: int):
         self.driver.find_element(*mpl.get_question_locator(number)).click()
     
+    @allure.step('Проверяем ответ {number}')
     def check_answer(self, number: int):
         return self.driver.find_element(*mpl.get_answer_locator(number)).is_displayed()
     
     def get_question_text(self, number: int):
-        return mpl.get_question_text(number)
+        return c.FAQ[number]["question"]
 
     def get_answer_text(self, number: int):
-        return mpl.get_answer_text(number)
+        return c.FAQ[number]["answer"]

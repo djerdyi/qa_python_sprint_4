@@ -1,55 +1,55 @@
-import pytest
 import random
 import string
 
+import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 
-BASE_URL = 'https://qa-scooter.praktikum-services.ru/'
-VALID_NAME_LENGTH = 2
-VALID_LASTNAME_LENGTH = 2
-VALID_ADDRESS_LENGTH = 5
-VALID_PHONE_NUMBER_LENGTH = 11
+from . import consts as c
+from .pages.base_page import BasePage
+
 
 @pytest.fixture(autouse=True, scope="function")
 def driver():
     '''Get Firefox webdriver'''
-    # driver = webdriver.Firefox()
-    driver = webdriver.Chrome()
-    driver.get(BASE_URL)
+    driver = webdriver.Firefox()
+    driver.get(c.BASE_URL)
     driver.maximize_window()
-    new_cookie = {"name": "Cartoshka", "value": "true"}
-    driver.add_cookie(new_cookie)
-    new_cookie = {"name": "Cartoshka-legacy", "value": "true"}
-    driver.add_cookie(new_cookie)
-    driver.refresh()
+    BasePage(driver).click_accept_cookies_button()
     yield driver
     driver.quit()
 
 @pytest.fixture(scope="session")
-def get_correct_order_data():
+def correct_order_data():
     '''Get correct order data'''
-    order_data = {
+    correct_order_data = {
         'name': '',
         'lastname': '',
         'address': '',
         'station': '',
-        'phone_number': ''
+        'phone_number': '',
+        'lease_term': '',
+        'comment': ''
     }
-    stations = ['Сокольники', 'Медведково', 'Ленинский проспект', 'Марьино']
+    stations = ['Медведково', 'Сокольники', 'Ленинский проспект', 'Марьино']
+    lease_terms = ['сутки', 'двое суток', 'трое суток', 'четверо суток', 'пятеро суток', 'шестеро суток', 'семеро суток']
     cyrillic_lower_letters = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
     symbols = cyrillic_lower_letters + cyrillic_lower_letters.upper()
-    name = ''.join(random.choice(symbols) for i in range(VALID_NAME_LENGTH))
-    lastname = ''.join(random.choice(symbols) for i in range(VALID_LASTNAME_LENGTH))
-    address = ''.join(random.choice(symbols) for i in range(VALID_ADDRESS_LENGTH))
-    station = stations[random.randint(0, len(stations) - 1)]
-    symbols = string.digits
-    phone_number = ''.join(random.choice(symbols) for i in range(VALID_PHONE_NUMBER_LENGTH))
-    
-    order_data['name'] = name
-    order_data['lastname'] = lastname
-    order_data['address'] = address
-    order_data['station'] = station
-    order_data['phone_number'] = phone_number
 
-    return order_data
+    name = ''.join(random.choice(symbols) for i in range(c.VALID_NAME_LENGTH))
+    lastname = ''.join(random.choice(symbols) for i in range(c.VALID_LASTNAME_LENGTH))
+    address = ''.join(random.choice(symbols) for i in range(c.VALID_ADDRESS_LENGTH))
+    comment = ''.join(random.choice(symbols) for i in range(c.VALID_COMMENT_LENGTH))
+    station = stations[random.randint(0, len(stations) - 1)]
+    lease_term = lease_terms[random.randint(0, len(lease_terms) - 1)]
+    symbols = string.digits
+    phone_number = ''.join(random.choice(symbols) for i in range(c.VALID_PHONE_NUMBER_LENGTH))
+    
+    correct_order_data['name'] = name
+    correct_order_data['lastname'] = lastname
+    correct_order_data['address'] = address
+    correct_order_data['station'] = station
+    correct_order_data['phone_number'] = phone_number
+    correct_order_data['lease_term'] = lease_term
+    correct_order_data['comment'] = comment
+
+    return correct_order_data
